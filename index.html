@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css">
+        /*General*/
+        * {
+            box-sizing: border-box;
+            background-origin: border-box;
+        }
+
+        /*Metroline start*/
+        .metroline-container {
+            width: 100%;
+            padding: 20px;
+            font-size: 10px;
+        }
+
+        .metroline-container>.metroline-row {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            margin-bottom: 12em;
+        }
+
+        .metroline-container .metroline-row .metroline-item {
+            position: relative;
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .metroline-container .metroline-row .metroline-item>* {
+            flex: 10 0.5 100%;
+        }
+
+        .metroline-container .metroline-row .metroline-item .metroline-display {
+            flex: 2 1 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /*Metroline graphics*/
+        /*Stop element*/
+        .metroline-container .metroline-row .metroline-item .metroline-display .metroline-element-stop {
+            display: block;
+            position: relative;
+            border: 0.2em solid grey;
+            background-color: green;
+            padding: 0.5em;
+            background-clip: content-box;
+            width: 2.5em;
+            height: 2.5em;
+        }
+
+        .metroline-container .metroline-row .metroline-item .metroline-display .metroline-element-stop.circle {
+            border-radius: 50%;
+        }
+
+        /*Route*/
+        .metroline-container .metroline-row .metroline-item .metroline-display .metroline-element-route {
+            flex: 1 0.1 auto;
+            width: calc(100% - 2.5em);
+            position: relative;
+            display: block;
+            height: 1em;
+            padding: 0.1em;
+            border: 0.2em solid grey;
+            border-left: 0;
+            border-right: 0;
+            background-color: green;
+            background-clip: content-box;
+            margin-left: -0.2em;
+            margin-right: -0.2em;
+
+        }
+
+        /*Direction modifiers*/
+        /*Left to right*/
+        .metroline-container.l2r .metroline-row:nth-child(odd) .metroline-item:nth-last-child(1) {
+            flex: 0 0.1 auto;
+        }
+
+        .metroline-container.l2r .metroline-row:nth-child(odd) .metroline-item:nth-last-child(1) .metroline-display {
+            justify-content: end;
+        }
+
+        .metroline-container.l2r .metroline-row:nth-child(odd) .metroline-item:nth-last-child(1) .metroline-display .metroline-element-stop {
+            order: 1;
+        }
+
+        .metroline-container.l2r .metroline-row:nth-child(odd) .metroline-item:nth-last-child(1) .metroline-display .metroline-element-route {
+            order: 0;
+        }
+
+        .metroline-container.l2r .metroline-row:nth-child(odd) .metroline-item .metroline-display .metroline-element-stop {
+            order: 1
+        }
+
+        .metroline-container.l2r .metroline-row:nth-child(odd) .metroline-item .metroline-info {
+            display: flex;
+            justify-items: start;
+            justify-content: start;
+            align-items: start;
+            align-content: start;
+        }
+
+        .metroline-container.l2r .metroline-row:nth-child(odd) .metroline-item .metroline-display .metroline-element-route {
+            order: 2;
+        }
+
+        .metroline-container.l2r .metroline-row:nth-child(even) .metroline-item:nth-child(1) {
+            flex: 0 0.1 auto;
+        }
+
+        .metroline-container.l2r .metroline-row:nth-child(odd) .metroline-item:nth-last-child(1) .metroline-display {
+            justify-content: start;
+        }
+
+        .metroline-container.l2r .metroline-row:nth-child(even) .metroline-item:nth-child(1) .metroline-display .metroline-element-stop {
+            order: 1;
+        }
+
+        .metroline-container.l2r .metroline-row:nth-child(even) .metroline-item:nth-child(1) .metroline-display .metroline-element-route {
+            order: 2;
+        }
+
+        .metroline-container.l2r .metroline-row:nth-child(even) .metroline-item .metroline-display .metroline-element-route {
+            order: 1;
+        }
+
+        .metroline-container.l2r .metroline-row:nth-child(even) .metroline-item .metroline-info {
+            display: flex;
+            justify-items: end;
+            justify-content: end;
+            align-items: end;
+            align-content: end;
+        }
+
+        .metroline-container.l2r .metroline-row:nth-child(even) .metroline-item .metroline-display .metroline-element-stop {
+            order: 2
+        }
+
+        .metroline-container.l2r .metroline-row:nth-child(even) .metroline-item:nth-child(1) .metroline-display {
+            justify-content: end;
+        }
+
+        /*Right to left*/
+    </style>
+</head>
+
+<body>
+    <div class="metroline-container l2r">
+        <div class="metroline-row">
+            <div class="metroline-item">
+                <span class="metroline-display">
+                    <span class="metroline-element-route"></span>
+                    <span class="metroline-element-stop circle"></span>
+                </span>
+                <span class="metroline-info">
+                    Underlying info
+                </span>
+            </div>
+            <div class="metroline-item">
+                <span class="metroline-display">
+                    <span class="metroline-element-route"></span>
+                    <span class="metroline-element-stop circle"></span>
+                </span>
+                <span class="metroline-info">
+                    More info
+                </span>
+            </div>
+            <div class="metroline-item">
+                <span class="metroline-display">
+                    <span class="metroline-element-route"></span>
+                    <span class="metroline-element-stop circle"></span>
+                </span>
+                <span class="metroline-info">
+                    even more info
+                </span>
+            </div>
+            <div class="metroline-item">
+                <span class="metroline-display">
+                    <span class="metroline-element-route"></span>
+                    <span class="metroline-element-stop circle"></span>
+                </span>
+                <span class="metroline-info">
+                    all the info
+                </span>
+            </div>
+        </div>
+        <div class="metroline-row">
+            <div class="metroline-item">
+                <span class="metroline-display">
+                    <span class="metroline-element-route"></span>
+                    <span class="metroline-element-stop circle"></span>
+                </span>
+                <span class="metroline-info">
+                    Underlying info
+                </span>
+            </div>
+            <div class="metroline-item">
+                <span class="metroline-display">
+                    <span class="metroline-element-route"></span>
+                    <span class="metroline-element-stop circle"></span>
+                </span>
+                <span class="metroline-info">
+                    More info
+                </span>
+            </div>
+            <div class="metroline-item">
+                <span class="metroline-display">
+                    <span class="metroline-element-route"></span>
+                    <span class="metroline-element-stop circle"></span>
+                </span>
+                <span class="metroline-info">
+                    even more info
+                </span>
+            </div>
+            <div class="metroline-item">
+                <span class="metroline-display">
+                    <span class="metroline-element-route"></span>
+                    <span class="metroline-element-stop circle"></span>
+                </span>
+                <span class="metroline-info">
+                    all the info
+                </span>
+            </div>
+        </div>
+    </div>
+    <!--<metro-line data="[{'name':'plop'}]" options="{'colors':{'borders':'#F0F0F0'}}"></metro-line>-->
+</body>
+<script src="metroline.js"></script>
+
+</html>
