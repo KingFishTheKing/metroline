@@ -60,6 +60,21 @@
             height: 2.5em;
         }
 
+        .metroline-container .metroline-row .metroline-item .metroline-display .metroline-element-stop:after {
+            content: attr(info);
+            position: absolute;
+            margin-top: 2em;
+            margin-left: -1.6em;
+            text-align:center;
+            width:5em;
+        }
+        .metroline-container .metroline-row .metroline-item:nth-child(1) .metroline-display .metroline-element-stop:after {
+            margin-left:1.6em;
+        }
+        .metroline-container .metroline-row .metroline-item:nth-last-child(1) .metroline-display .metroline-element-stop:after {
+            margin-left:calc(-1 * (1.6em * 3));
+        }
+
         .metroline-container .metroline-row .metroline-item .metroline-display .metroline-element-stop.circle {
             border-radius: 50%;
         }
@@ -79,7 +94,6 @@
             background-clip: content-box;
             margin-left: -0.2em;
             margin-right: -0.2em;
-
         }
 
         /*Direction modifiers*/
@@ -162,37 +176,25 @@
             <div class="metroline-item">
                 <span class="metroline-display">
                     <span class="metroline-element-route"></span>
-                    <span class="metroline-element-stop circle"></span>
-                </span>
-                <span class="metroline-info">
-                    Underlying info
+                    <span class="metroline-element-stop circle" info="more info"></span>
                 </span>
             </div>
             <div class="metroline-item">
                 <span class="metroline-display">
                     <span class="metroline-element-route"></span>
-                    <span class="metroline-element-stop circle"></span>
-                </span>
-                <span class="metroline-info">
-                    More info
+                    <span class="metroline-element-stop circle" info="more info"></span>
                 </span>
             </div>
             <div class="metroline-item">
                 <span class="metroline-display">
                     <span class="metroline-element-route"></span>
-                    <span class="metroline-element-stop circle"></span>
-                </span>
-                <span class="metroline-info">
-                    even more info
+                    <span class="metroline-element-stop circle" info="more info"></span>
                 </span>
             </div>
             <div class="metroline-item">
                 <span class="metroline-display">
                     <span class="metroline-element-route"></span>
-                    <span class="metroline-element-stop circle"></span>
-                </span>
-                <span class="metroline-info">
-                    all the info
+                    <span class="metroline-element-stop circle" info="more info"></span>
                 </span>
             </div>
         </div>
@@ -200,37 +202,25 @@
             <div class="metroline-item">
                 <span class="metroline-display">
                     <span class="metroline-element-route"></span>
-                    <span class="metroline-element-stop circle"></span>
-                </span>
-                <span class="metroline-info">
-                    Underlying info
+                    <span class="metroline-element-stop circle" info="more info"></span>
                 </span>
             </div>
             <div class="metroline-item">
                 <span class="metroline-display">
                     <span class="metroline-element-route"></span>
-                    <span class="metroline-element-stop circle"></span>
-                </span>
-                <span class="metroline-info">
-                    More info
+                    <span class="metroline-element-stop circle" info="more info"></span>
                 </span>
             </div>
             <div class="metroline-item">
                 <span class="metroline-display">
                     <span class="metroline-element-route"></span>
-                    <span class="metroline-element-stop circle"></span>
-                </span>
-                <span class="metroline-info">
-                    even more info
+                    <span class="metroline-element-stop circle" info="more info"></span>
                 </span>
             </div>
             <div class="metroline-item">
                 <span class="metroline-display">
                     <span class="metroline-element-route"></span>
-                    <span class="metroline-element-stop circle"></span>
-                </span>
-                <span class="metroline-info">
-                    all the info
+                    <span class="metroline-element-stop circle" info="more info"></span>
                 </span>
             </div>
         </div>
