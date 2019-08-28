@@ -2,37 +2,42 @@
 class Metroline extends HTMLElement{
     constructor(){
         super();
-        let options = {
-            "row": 4,
-            "scale": 10,
-            "direction": 'r2l' | 'l2r',
-            "stop": {
-                "bg_incomplete": '#FFF',
-                "bg_pending": "#F0F0F0",
-                "bg_complete": "#000",
-                "circle": true | false,
-                "border": {
-                    "spacing": 0.1,
-                    "size": 0.2,
-                    "color": "grey"
-                },
-                "info": {
-                    "size": 0.5,
-                    "color": "red"
-                }
-            },
-            "route": {
-                "bg_incomplete": '#FFF',
-                "bg_pending": "#F0F0F0",
-                "bg_complete": "#000",
-                "height": 1,
-                "border": {
-                    "spacing": 0.1,
-                    "size": 0.2,
-                    "color": "grey"
-                }
-            }   
-        }
+        //Extract or build the optionObject
+        this.optionObject = this.hasAttribute('options') ? JSON.parse(this.getAttribute('options').replace(/'/gi, "\"")) : {};
+        //Check general settings
+        this.optionObject.scale = !isNaN(this.optionObject.scale) ? this.optionObject.scale : 10;
+        this.optionObject.direction = (['r2l', 'l2r'].includes(this.optionObject.direction)) ? this.optionObject.direction : 'r2l';
+        //Reappend or initialize row object
+        this.optionObject.row = this.optionObject.row ? this.optionObject.row : {};
+        this.optionObject.row.stops = !isNaN(this.optionObject.row.stops) ? this.optionObject.row.stops : 4;
+        this.optionObject.row.spaceBetween = !isNaN(this.optionObject.row.spaceBetween) ? this.optionObject.row.spaceBetween : 2.5;
+        this.optionObject.row.connected =  (['no', 'first', 'last', 'init'].includes(this.optionObject.row.connected)) ? this.optionObject.row.connected : 'init';
+        //Reappend or initialize stop object
+        this.optionObject.stop = this.optionObject.stop ? this.optionObject.stop : {};
+        this.optionObject.stop.bgIncomplete = this.optionObject.stop.bgIncomplete ? this.optionObject.stop.bgIncomplete : '#333333'; 
+        this.optionObject.stop.bgPending = this.optionObject.stop.bgPending ?  this.optionObject.stop.bgPending : "#333333";
+        this.optionObject.stop.bgComplete = this.optionObject.stop.bgComplete ? this.optionObject.stop.bgComplete :  "#000000";
+        this.optionObject.stop.height = !isNaN(this.optionObject.stop.height) ? this.optionObject.stop.height : 2.5;
+        this.optionObject.stop.width = !isNaN(this.optionObject.stop.width) ? this.optionObject.stop.width: 2.5;
+        this.optionObject.stop.circle = this.optionObject.stop.circle != undefined ? new Boolean(this.optionObject.stop.circle) : true;
+        this.optionObject.stop.border = this.optionObject.stop.border ? this.optionObject.stop.border : {};
+        this.optionObject.stop.border.spacing = !isNaN(this.optionObject.stop.border.spacing) ? this.optionObject.stop.border.spacing : 0.1;
+        this.optionObject.stop.border.size = !isNaN(this.optionObject.stop.border.size) ? this.optionObject.stop.border.size : 0.2;
+        this.optionObject.stop.border.color = this.optionObject.stop.border.color ? this.optionObject.stop.border.color : '#333333';
+        this.optionObject.stop.info = this.optionObject.stop.info ? this.optionObject.stop.info : {};
+        this.optionObject.stop.info.size = !isNaN(this.optionObject.stop.info.size) ? this.optionObject.stop.info.size : 0.5;
+        this.optionObject.stop.info.color = this.optionObject.stop.info.color ? this.optionObject.stop.info.color : "#333333";
+        //Reappend or initialize stop object
+        this.optionObject.route = this.optionObject.route ? this.optionObject.route : {};
+        this.optionObject.route.bgComplete = this.optionObject.route.bgComplete ? this.optionObject.route.bgComplete : "#333333";
+        this.optionObject.route.bgIncomplete = this.optionObject.route.bgIncomplete ? this.optionObject.route.bgIncomplete : '#333333';
+        this.optionObject.route.bgPending = this.optionObject.route.bgPending ? this.optionObject.route.bgPending : "#000000";
+        this.optionObject.route.height = !isNaN(this.optionObject.route.height) ? this.optionObject.route.height : 1;
+        this.optionObject.route.border = this.optionObject.route.border ? this.optionObject.route.border : {};
+        this.optionObject.route.border.spacingBetween = !isNaN(this.optionObject.route.border.spacingBetween) ? this.optionObject.route.border.spacingBetween : 0.1;
+        this.optionObject.route.border.size = !isNaN(this.optionObject.route.border.size) ? this.optionObject.route.border.size : 0.2;
+        this.optionObject.route.border.color = this.optionObject.route.border.color ? this.optionObject.route.border.color : '#333333'
+        console.dir(this.optionObject);
         this.dataObject = this.getAttribute('stops').split(';');
         const span = document.createElement('span');
             this.container = span.cloneNode()
@@ -62,7 +67,7 @@ class Metroline extends HTMLElement{
                     .metroline-container {
                         width: 100%;
                         padding: 20px;
-                        font-size: 10px;
+                        font-size: ${this.optionObject.scale}px;
                     }
             
                     .metroline-container>.metroline-row {
@@ -71,7 +76,7 @@ class Metroline extends HTMLElement{
                         justify-content: space-between;
                         flex-direction: row;
                         flex-wrap: nowrap;
-                        margin-bottom: 12em;
+                        margin-bottom: ${this.optionObject.row.spaceBetween}em;
                     }
             
                     .metroline-container .metroline-row .metroline-item {
@@ -97,49 +102,65 @@ class Metroline extends HTMLElement{
                     .metroline-container .metroline-row .metroline-item .metroline-display .metroline-element-stop {
                         display: block;
                         position: relative;
-                        border: 0.2em solid grey;
-                        background-color: green;
-                        padding: 0.5em;
+                        border: ${this.optionObject.stop.border.size}em solid ${this.optionObject.stop.border.color};
+                        padding: ${this.optionObject.stop.border.spacing}em;
                         background-clip: content-box;
-                        width: 2.5em;
-                        height: 2.5em;
+                        width: ${this.optionObject.stop.width}em;
+                        height: ${this.optionObject.stop.circle ? this.optionObject.stop.height : this.optionObject.stop.width}em;
+                        ${this.optionObject.stop.circle ? 'border-radius:50%;' : ''}
+                    }
+                    .metroline-container .metroline-row .metroline-item .metroline-display .metroline-element-stop.complete{
+                        background-color: ${this.optionObject.stop.bgComplete};
+                    }
+                    .metroline-container .metroline-row .metroline-item .metroline-display .metroline-element-stop.incomplete{
+                        background-color: ${this.optionObject.stop.bgIncomplete};
+                    }
+                    .metroline-container .metroline-row .metroline-item .metroline-display .metroline-element-stop.pending{
+                        background-color: ${this.optionObject.stop.bgPending};
                     }
             
                     .metroline-container .metroline-row .metroline-item .metroline-display .metroline-element-stop:after {
                         content: attr(info);
                         position: absolute;
-                        margin-top: 2em;
-                        margin-left: -1.6em;
+                        margin-top: ${this.optionObject.stop.height}em;
+                        margin-left: -${this.optionObject.stop.width / 2 - 0.5}em;
                         text-align:center;
-                        width:5em;
+                        width:${this.optionObject.stop.width * 2}em;
+                        size:${this.optionObject.stop.info.size}em;
+                        color:${this.optionObject.stop.info.color};
                     }
                     .metroline-container .metroline-row .metroline-item:nth-child(1) .metroline-display .metroline-element-stop:after {
-                        margin-left:1.6em;
+                        margin-left:${this.optionObject.stop.width / 2 - 0.5}em;
                     }
                     .metroline-container .metroline-row .metroline-item:nth-last-child(1) .metroline-display .metroline-element-stop:after {
-                        margin-left:calc(-1 * (1.6em * 3));
+                        margin-left:calc(-1 * (${this.optionObject.stop.width / 2 - 0.5}em * 3));
                     }
-            
-                    .metroline-container .metroline-row .metroline-item .metroline-display .metroline-element-stop.circle {
-                        border-radius: 50%;
-                    }
+
             
                     /*Route*/
                     .metroline-container .metroline-row .metroline-item .metroline-display .metroline-element-route {
                         flex: 1 0.1 auto;
-                        width: calc(100% - 2.5em);
+                        width: calc(100% - ${this.optionObject.stop.width}em);
                         position: relative;
                         display: block;
-                        height: 1em;
-                        padding: 0.1em;
-                        border: 0.2em solid grey;
+                        height: ${this.optionObject.route.height}em;
+                        padding: ${this.optionObject.route.border.spacingBetween}em;
+                        border: ${this.optionObject.route.border.size}em solid ${this.optionObject.route.border.color};
                         border-left: 0;
                         border-right: 0;
-                        background-color: green;
                         background-clip: content-box;
-                        margin-left: -0.1em;
-                        margin-right: -0.1em;
+                        margin-left: -${this.optionObject.scale / 100}em;
+                        margin-right: -${this.optionObject.scale / 100}em;
                     }
+                    .metroline-container .metroline-row .metroline-item .metroline-display .metroline-element-route.complete {
+                        background-color:${this.optionObject.route.bgComplete};
+                    } 
+                    .metroline-container .metroline-row .metroline-item .metroline-display .metroline-element-route.incomplete {
+                        background-color:${this.optionObject.route.bgIncomplete};
+                    }
+                    .metroline-container .metroline-row .metroline-item .metroline-display .metroline-element-route.pending {
+                        background-color:${this.optionObject.route.bgPending};
+                    }    
             
                     /*Direction modifiers*/
                     /*Left to right*/
@@ -290,6 +311,7 @@ class Metroline extends HTMLElement{
             let item = this.item.cloneNode();
             let display = this.display.cloneNode();
             let stop = this.stop.cloneNode();
+            stop.classList.add(obj.status);
             stop.setAttribute('info', obj.info);
             let route = this.route.cloneNode();
             route.classList.add(obj.status);
@@ -298,14 +320,19 @@ class Metroline extends HTMLElement{
             item.appendChild(display);
             return item;
         });
-        let r = this.row.cloneNode();
         let c = this.container.cloneNode();
-        r.appendChild(object[0]);
-        r.appendChild(object[1]);
-        r.appendChild(object[2]);
-        c.appendChild(r);
+        for(let loop = 0; loop <= Math.ceil(object.length / this.optionObject.row.stops); loop++){
+            let newRow = this.row.cloneNode();
+            for (let countItem = 0; countItem < this.optionObject.row.stops; countItem++){
+                if (object.length != 0){
+                    newRow.appendChild(object.pop());
+                }
+            }
+            console.log(newRow, Math.ceil(object.length / this.optionObject.row.stops))
+            c.appendChild(newRow);
+        }
         shadow.appendChild(this.stylesheet);
         shadow.appendChild(c);
     }
 }
-this.customElements.define("metro-line", Metroline);
+window.customElements.define("metro-line", Metroline);
